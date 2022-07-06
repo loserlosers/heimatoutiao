@@ -1,6 +1,8 @@
 <template>
   <div class="login-container">
-    <van-nav-bar title="登录" />
+    <van-nav-bar class="page-nav" title="登录"
+      ><van-icon slot="left" name="cross" @click="$router.back()" />
+    </van-nav-bar>
     <van-form @submit="onSubmit" ref="form">
       <van-field
         v-model="user.mobile"
@@ -63,8 +65,8 @@ export default {
       // username: "",
       // password: "",
       user: {
-        mobile: "",
-        code: "",
+        mobile: "13911111112",
+        code: "246810",
       },
       rules: {
         mobile: [
@@ -97,8 +99,11 @@ export default {
     async onSubmit() {
       try {
         const res = await login(this.user);
-        console.log(res);
+        // console.log(res);
+        // 登录成功后获取的数据存储到vuex和本地存储当中
+        this.$store.commit("setUser", res.data.data);
         Toast.success("登录成功");
+        this.$router.push("/");
       } catch (error) {
         // console.log(error?.response?.data?.message);
         Toast.fail(error?.response?.data?.message || "服务端错误");
@@ -138,6 +143,13 @@ export default {
 
 <style scoped lang="less">
 .login-container {
+  .page-nav {
+    background-color: #3296fa;
+    .van-nav-bar__title,
+    .van-icon {
+      color: #fff;
+    }
+  }
   /deep/.toutiao {
     font-size: 37px;
   }
